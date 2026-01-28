@@ -1,0 +1,137 @@
+
+In this replication attempt, we used only the 1st generated set of imputed data as the original data has too many missing values, the original paper used 10 generated sets and later pooled the data, and so it goes beyond the scope of what we currently are capable of doing. The first table is not the core result of the research paper, however, it serves as a proof that the 1st generated imputed data-set is close enough to the original dataset, as it produced numbers similar to the 1st table of the research paper
+
+```{r}
+#load the libraries
+library(haven)
+library(dplyr)
+library(fixest)
+library(broom)
+library(mitools)
+library(emmeans)
+library(mice)
+```
+
+```{r replication attempt}
+#Table 1 - Only uses 1 row of imputed data
+seattle <- read_dta("Seattle_SSO.dta")%>%filter(period==0, `_mi_m`==1)%>%filter(seattle_treat==1 | minwage_comp==1)
+seattle
+
+#control variables, used in the formula
+controls <- "factor(age)+female+factor(race)+factor(educ)+enrolled+factor(cohabstatus)+kids+manager+factor(jobtenure)+factor(subsector)"
+
+#created this variable so the emmeans function can work properly as these variables create too many possibilities
+
+nuisance_vars <- c("age", "race", "educ", "cohabstatus", "jobtenure", "subsector")
+
+#Unpred row (0 to 6)
+f_scale <- as.formula(paste("unpred_scale~seattle_treat+",controls))
+model_unpred<-lm(f_scale, data=seattle, weights=acs_weight)
+
+#Less than 2 weeks notice
+f_short <- as.formula(paste("shortnotice~seattle_treat+",controls))
+model_short<-lm(f_short,data=seattle,weights=acs_weight)
+
+#Last-minute change
+f_timing <- as.formula(paste("timing~seattle_treat+",controls))
+model_timing<-lm(f_timing,data=seattle,weights=acs_weight)
+
+#Change without pay
+f_timingpay <- as.formula(paste("timingpay~seattle_treat+",controls))
+model_timingpay<-lm(f_timingpay,data=seattle,weights=acs_weight)
+
+#Clopening
+f_clopen <- as.formula(paste("clopen~seattle_treat+",controls))
+model_clopen<-lm(f_clopen,data=seattle,weights=acs_weight)
+
+#On-call
+f_oncall <- as.formula(paste("oncall~seattle_treat+",controls))
+model_oncall<-lm(f_oncall,data=seattle,weights=acs_weight)
+
+#Cancel without pay
+f_cancelpay <- as.formula(paste("cancelpay~seattle_treat+",controls))
+model_cancelpay<-lm(f_cancelpay,data=seattle,weights=acs_weight)
+
+#Happiness row
+f_happy<-as.formula(paste("happy~seattle_treat+",controls))
+model_happiness<-lm(f_happy, data=seattle, weights=acs_weight)
+
+#Psychological distress row
+f_distressed<-as.formula(paste("distressed~seattle_treat+",controls))
+model_distressed <-lm(f_distressed, data=seattle, weights=acs_weight)
+
+#Good sleep row
+f_goodsleep<-as.formula(paste("goodsleep~seattle_treat+",controls))
+model_goodsleep <- lm(f_goodsleep, data = seattle, weights = acs_weight)
+
+#Any material hardship
+
+f_hardship<-as.formula(paste("hardship~seattle_treat+",controls))
+model_hardship <- lm(f_hardship, data = seattle, weights = acs_weight)
+
+#calculating baseline work schedule 
+unpred_adj_means <- emmeans(model_unpred, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+short_adj_means <- emmeans(model_short, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+timing_adj_means <- emmeans(model_timing, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+timingpay_adj_means <- emmeans(model_timingpay, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+clopen_adj_means <- emmeans(model_clopen, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+oncall_adj_means <- emmeans(model_oncall, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+cancelpay_adj_means <- emmeans(model_cancelpay, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+
+
+
+#calculating wellbeing
+happy_adj_means <- emmeans(model_happiness, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+distressed_adj_means <- emmeans(model_distressed, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+goodsleep_adj_means <- emmeans(model_goodsleep, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+hardship_adj_means <- emmeans(model_hardship, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
+
+
+cat("\n--- UNPRED.SCALE ADJUSTED MEANS ---\n")
+print(unpred_adj_means)
+cat("\n--- LESS THAN 2 WEEKS NOTICE ADJUSTED MEANS ---\n")
+print(short_adj_means)
+cat("\n--- LAST MINUTE CHANGE ADJUSTED MEANS ---\n")
+print(timing_adj_means)
+cat("\n--- CHANGE WITHOUT PAY ADJUSTED MEANS ---\n")
+print(timingpay_adj_means)
+cat("\n--- CLOPENING ADJUSTED MEANS ---\n")
+print(clopen_adj_means)
+cat("\n--- ON-CALL ADJUSTED MEANS ---\n")
+print(oncall_adj_means)
+cat("\n--- CANCEL WITHOUT PAY ADJUSTED MEANS ---\n")
+print(cancelpay_adj_means)
+
+cat("\n--- HAPPINESS ADJUSTED MEANS ---\n")
+print(happy_adj_means)
+cat("\n--- PSYCHOLOGICAL DISTRESS ADJUSTED MEANS ---\n")
+print(distressed_adj_means)
+cat("\n--- GOOD SLEEP ADJUSTED MEANS ---\n")
+print(goodsleep_adj_means)
+cat("\n--- MATERIAL HARDSHIP ADJUSTED MEANS ---\n")
+print(hardship_adj_means)
+
+
+
+```
+```{r table 2}
+#TABLE 2 Replication Attempt
+# THIS is likely what your professor wants to see (The Table 2 logic)
+seattle_full<-read_dta("Seattle_SSO.dta")%>%filter(`_mi_m`==1)%>%filter(seattle_treat==1 | minwage_comp==1)
+seattle_full <- seattle_full %>%
+  mutate(post = ifelse(period > 0, 1, 0), treat_x_post = seattle_treat*post)
+
+iv_model <- feols(happy ~ factor(age) + female + factor(race) + factor(educ) + 
+                  enrolled + factor(cohabstatus) + kids + manager + 
+                  factor(jobtenure) + factor(subsector) | 
+                  unpred_scale ~ treat_x_post, 
+                  data = seattle_full, 
+                  weights = ~acs_weight,
+                  cluster = ~seattle_treat) # Clustering by city is standard for DiD
+
+# 3. See the results
+summary(iv_model)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
