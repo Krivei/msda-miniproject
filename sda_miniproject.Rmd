@@ -1,5 +1,5 @@
 
-In this replication attempt, we used only the 1st generated set of imputed data as the original data has too many missing values, the original paper used 10 generated sets and later pooled the data, and so it goes beyond the scope of what we currently are capable of doing. The first table is not the core result of the research paper, however, it serves as a proof that the 1st generated imputed data-set is close enough to the original dataset, as it produced numbers similar to the 1st table of the research paper
+In this replication attempt, we used only the 1st generated set of imputed data as the original data has too many missing values, the original paper used 10 generated sets and used rubin's rule to pool the data, and so it goes beyond the scope of what we currently are capable of doing. The first table is not the core result of the research paper, it shows the result of covariate adjustment to make a fair comparison between 2 groups.
 
 ```{r}
 #load the libraries
@@ -9,66 +9,105 @@ library(fixest)
 library(broom)
 library(mitools)
 library(emmeans)
-library(mice)
+library(ggplot2)
 ```
+The code below is an attempt to replicate the 1st table. with steps listed below :
+1. Extraction of a set of imputed data
+2. Defining the control variables that were used in the calculation
+3. Defining "nuisance" variables, as how it is in the research paper.
+4. For each variables used to indicate well-being and the variables under the "Work schedules", we calculate the mean values and percentages.
+5. The mean values and percentages, as how they are done in the paper, are regression-adjusted to control for demographics and work characteristics.
+
+What does it mean for the mean values to be regression adjusted?
+regression-adjustment (also called "covariate adjustment") is used to ensure that the comparison between seattle and the other cities are "Apple to Apple". For example, Seattle workers may be naturally older, more educated, or have better jobs than the people in other city, if seattle workers are happier a year later, it might be because of their difference at the start of the study instead of the effect of the law. This method is then used to make sure that both groups are equal, which is why the results are somewhat similar.
+
 
 ```{r replication attempt}
 #Table 1 - Only uses 1 row of imputed data
-seattle <- read_dta("Seattle_SSO.dta")%>%filter(period==0, `_mi_m`==1)%>%filter(seattle_treat==1 | minwage_comp==1)
-seattle
+#1. Extraction of a set of imputed data
 
-#control variables, used in the formula
+seattle <- read_dta("Seattle_SSO.dta") %>% filter(period==0, `_mi_m` == 1) %>% filter(seattle_treat == 1 | minwage_comp == 1)
+seattle
+s_m <- seattle %>% filter(seattle_treat == 1)
+s_m %>% reframe(avg_unpred_scale = mean(unpred_scale),
+              avg_shortnotice = mean(shortnotice),
+              avg_timing = mean(timing),
+              avg_timingpay = mean(timingpay),
+              avg_clopening = mean(clopen),
+              avg_oncall = mean(oncall),
+              avg_cancelpay = mean(cancelpay),
+              avg_happy = mean(happy),
+              avg_distressed = mean(distressed),
+              avg_goodsleep = mean(goodsleep),
+              avg_hardship = mean(hardship)
+              )
+
+c_m <- seattle%>%filter(seattle_treat == 0 & minwage_comp == 1)
+c_m%>%reframe(avg_unpred_scale = mean(unpred_scale),
+              avg_shortnotice = mean(shortnotice),
+              avg_timing = mean(timing),
+              avg_timingpay = mean(timingpay),
+              avg_clopening = mean(clopen),
+              avg_oncall = mean(oncall),
+              avg_cancelpay = mean(cancelpay),
+              avg_happy = mean(happy),
+              avg_distressed = mean(distressed),
+              avg_goodsleep = mean(goodsleep),
+              avg_hardship = mean(hardship)
+              )
+
+#2. Defining the control variables that were used in the calculation
 controls <- "factor(age)+female+factor(race)+factor(educ)+enrolled+factor(cohabstatus)+kids+manager+factor(jobtenure)+factor(subsector)"
 
-#created this variable so the emmeans function can work properly as these variables create too many possibilities
+#3. Defining "nuisance" variables so the emmeans function can work properly
+nuisance_vars <- c("age", "race", "female", "educ", "enrolled", "cohabstatus", "kids", "manager", "jobtenure", "subsector")
 
-nuisance_vars <- c("age", "race", "educ", "cohabstatus", "jobtenure", "subsector")
-
-#Unpred row (0 to 6)
+#4. For each variables used to indicate well-being and the variables under the "Work schedules", we calculate the mean values and percentages.
 f_scale <- as.formula(paste("unpred_scale~seattle_treat+",controls))
-model_unpred<-lm(f_scale, data=seattle, weights=acs_weight)
+model_unpred<-lm(f_scale, data=seattle, weights = acs_weight)
 
 #Less than 2 weeks notice
 f_short <- as.formula(paste("shortnotice~seattle_treat+",controls))
-model_short<-lm(f_short,data=seattle,weights=acs_weight)
+model_short<-lm(f_short,data=seattle,weights = acs_weight)
 
 #Last-minute change
 f_timing <- as.formula(paste("timing~seattle_treat+",controls))
-model_timing<-lm(f_timing,data=seattle,weights=acs_weight)
+model_timing <- lm(f_timing,data=seattle,weights = acs_weight)
 
 #Change without pay
 f_timingpay <- as.formula(paste("timingpay~seattle_treat+",controls))
-model_timingpay<-lm(f_timingpay,data=seattle,weights=acs_weight)
+model_timingpay <- lm(f_timingpay,data=seattle,weights = acs_weight)
 
 #Clopening
 f_clopen <- as.formula(paste("clopen~seattle_treat+",controls))
-model_clopen<-lm(f_clopen,data=seattle,weights=acs_weight)
+model_clopen <- lm(f_clopen,data=seattle,weights = acs_weight)
 
 #On-call
 f_oncall <- as.formula(paste("oncall~seattle_treat+",controls))
-model_oncall<-lm(f_oncall,data=seattle,weights=acs_weight)
+model_oncall <- lm(f_oncall,data=seattle,weights = acs_weight)
 
 #Cancel without pay
 f_cancelpay <- as.formula(paste("cancelpay~seattle_treat+",controls))
-model_cancelpay<-lm(f_cancelpay,data=seattle,weights=acs_weight)
+model_cancelpay <- lm(f_cancelpay,data=seattle,weights = acs_weight)
 
 #Happiness row
-f_happy<-as.formula(paste("happy~seattle_treat+",controls))
-model_happiness<-lm(f_happy, data=seattle, weights=acs_weight)
+f_happy <- as.formula(paste("happy~seattle_treat+",controls))
+model_happiness <- lm(f_happy, data=seattle, weights = acs_weight)
 
 #Psychological distress row
-f_distressed<-as.formula(paste("distressed~seattle_treat+",controls))
-model_distressed <-lm(f_distressed, data=seattle, weights=acs_weight)
+f_distressed <- as.formula(paste("distressed~seattle_treat+",controls))
+model_distressed <- lm(f_distressed, data=seattle, weights = acs_weight)
 
 #Good sleep row
-f_goodsleep<-as.formula(paste("goodsleep~seattle_treat+",controls))
+f_goodsleep <- as.formula(paste("goodsleep~seattle_treat+",controls))
 model_goodsleep <- lm(f_goodsleep, data = seattle, weights = acs_weight)
 
 #Any material hardship
 
-f_hardship<-as.formula(paste("hardship~seattle_treat+",controls))
+f_hardship <- as.formula(paste("hardship~seattle_treat+",controls))
 model_hardship <- lm(f_hardship, data = seattle, weights = acs_weight)
 
+#5. The mean values and percentages, as how they are done in the paper, are regression-adjusted to control for demographics and work characteristics.
 #calculating baseline work schedule 
 unpred_adj_means <- emmeans(model_unpred, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
 short_adj_means <- emmeans(model_short, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
@@ -78,9 +117,7 @@ clopen_adj_means <- emmeans(model_clopen, specs = "seattle_treat", data = seattl
 oncall_adj_means <- emmeans(model_oncall, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
 cancelpay_adj_means <- emmeans(model_cancelpay, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
 
-
-
-#calculating wellbeing
+#calculating baseline wellbeing
 happy_adj_means <- emmeans(model_happiness, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
 distressed_adj_means <- emmeans(model_distressed, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
 goodsleep_adj_means <- emmeans(model_goodsleep, specs = "seattle_treat", data = seattle, nuisance = nuisance_vars,weights = "proportional")
@@ -110,28 +147,473 @@ cat("\n--- GOOD SLEEP ADJUSTED MEANS ---\n")
 print(goodsleep_adj_means)
 cat("\n--- MATERIAL HARDSHIP ADJUSTED MEANS ---\n")
 print(hardship_adj_means)
-
-
-
 ```
+How to interpret the results? 
+emmean values are the adjusted mean of each variables. seattle_treat 0 refers to the comparison group, while seattle_treat 1 refers to the treatment group.We can see that the difference are relatively smaller than calculating just the raw average of each variables from both groups.
+
+
+
+
+-----2nd Table-----
+
+Methods :
+To investigate the effect of the law reenactment, researchers then decided to use the two-stage least squares with the steps listed below :
+1. Extract the same data, but without filtering out the other periods.
+2. Change the periods into either 0 or 1 (before OR after the reenactment)
+3. Use Ordinary Least Square regressions to produce coefficients to "clean" the data.
+4. Use the data that is affected by the coefficient in the probit model to see if 
+
 ```{r table 2}
 #TABLE 2 Replication Attempt
-# THIS is likely what your professor wants to see (The Table 2 logic)
-seattle_full<-read_dta("Seattle_SSO.dta")%>%filter(`_mi_m`==1)%>%filter(seattle_treat==1 | minwage_comp==1)
+#Get the same data, but without filtering out the other periods
+seattle_full <- read_dta("Seattle_SSO.dta") %>% filter(`_mi_m` == 1) %>% filter(seattle_treat == 1 | minwage_comp == 1)
+#Change the periods into either 0 or 1 (before OR after treatment only)
 seattle_full <- seattle_full %>%
   mutate(post = ifelse(period > 0, 1, 0), treat_x_post = seattle_treat*post)
 
-iv_model <- feols(happy ~ factor(age) + female + factor(race) + factor(educ) + 
-                  enrolled + factor(cohabstatus) + kids + manager + 
-                  factor(jobtenure) + factor(subsector) | 
-                  unpred_scale ~ treat_x_post, 
-                  data = seattle_full, 
-                  weights = ~acs_weight,
-                  cluster = ~seattle_treat) # Clustering by city is standard for DiD
 
-# 3. See the results
-summary(iv_model)
+#Following the paper's two-staged least square model
+#1st stage is Ordinary Least Square regression
+first_stage <- lm(unpred_scale~treat_x_post + factor(age) + female + factor(race) + factor(educ) + enrolled + factor(cohabstatus) + kids + manager + factor(jobtenure) + factor(subsector),data = seattle_full,weights = acs_weight)
+
+seattle_full$unpred_hat <- predict(first_stage)
+
+#2nd stage uses the probit model because variables such as happy, distressed, goodsleep, and hardship are binary instead of continuous
+second_stage_probit <- glm(happy ~ unpred_hat + factor(age) + female + 
+                           factor(race) + factor(educ) + enrolled + 
+                           factor(cohabstatus) + kids + manager + 
+                           factor(jobtenure) + factor(subsector), 
+                           data = seattle_full, 
+                           weights = acs_weight, 
+                           family = binomial(link = "probit"))
+
+ssp_distress <- glm(distressed~unpred_hat + factor(age) + female + 
+                           factor(race) + factor(educ) + enrolled + 
+                           factor(cohabstatus) + kids + manager + 
+                           factor(jobtenure) + factor(subsector), 
+                           data = seattle_full, 
+                           weights = acs_weight, 
+                           family = binomial(link = "probit"))
+
+ssp_goodsleep <- glm(goodsleep~unpred_hat + factor(age) + female + 
+                           factor(race) + factor(educ) + enrolled + 
+                           factor(cohabstatus) + kids + manager + 
+                           factor(jobtenure) + factor(subsector), 
+                           data = seattle_full, 
+                           weights = acs_weight, 
+                           family = binomial(link = "probit"))
+
+ssp_hardship <- glm(hardship~unpred_hat + factor(age) + female + 
+                           factor(race) + factor(educ) + enrolled + 
+                           factor(cohabstatus) + kids + manager + 
+                           factor(jobtenure) + factor(subsector), 
+                           data = seattle_full, 
+                           weights = acs_weight, 
+                           family = binomial(link = "probit"))
+
+cat("\n--- Happiness ---\n")
+summary(second_stage_probit)$coefficients["unpred_hat", , drop = FALSE]
+cat("\n--- Distress ---\n")
+summary(ssp_distress)$coefficients["unpred_hat", , drop = FALSE]
+cat("\n--- Good Sleep ---\n")
+summary(ssp_goodsleep)$coefficients["unpred_hat", , drop = FALSE]
+cat("\n--- Any Materials Hardship ---\n")
+summary(ssp_hardship)$coefficients["unpred_hat", , drop = FALSE]
+```
+How to interpret?
+Estimates showed the direction of the effect, 
+
+negative estimate values mean that every 1-unit increment in unpredictability will reduce the probability of being happy, having a good sleep, and being distressed. 
+
+Positive estimate value means that every 1-unit increment in unpredictability will increase the probability of having material hardship.
+
+However, only the p-values of Good sleep and Happiness are lower than 0.05.
+
+
+-----Figure 1-----
+Difference-in-Difference?
+To compare the effect of law reenactment in both group, researchers used DiD to compare the changes in multiple variables against the baseline value.
+
+The simplified algorithm to produce such a graph works as how it's described below :
+
+Year 1 = (unpred_scale seattle year 1 - unpred_scale seattle year 0) - (unpred_scale comparison_city year 1 - unpred_scale comparison_city year 0)
+Year 2 = (unpred_scale seattle year 2 - unpred_scale seattle year 0) - (unpred_scale comparison_city year 2 - unpred_scale comparison_city year 0)
+
+Unlike the raw calculation, we are using regression-adjusted means as how the researchers did it.
+
+```{r figure 1 DiD}
+
+?emmeans
+
+#Difference-in-difference model
+#DiD model - Unpred. Scale
+did_model_unpred <- lm(unpred_scale ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_unpred <- emmeans(did_model_unpred, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+#DiD model - Short notice 
+did_model_shortnotice <- lm(shortnotice ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_shortnotice <- emmeans(did_model_shortnotice, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+
+#DiD model - Shift change
+did_model_timing <- lm(timing ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_timing <- emmeans(did_model_timing, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+#DiD model - Shift change without pay
+did_model_timingpay <- lm(timingpay ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_timingpay <- emmeans(did_model_timingpay, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+#DiD model - Clopening shift
+did_model_clopen <- lm(clopen ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_clopen <- emmeans(did_model_clopen, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+#DiD model - Oncall shift
+did_model_oncall <- lm(oncall ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_oncall <- emmeans(did_model_oncall, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+#DiD model - Cancel without pay
+did_model_cancelpay <- lm(cancelpay ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_cancelpay <- emmeans(did_model_cancelpay, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r figure 1}
+#Graph for unpredictable schedule (0 to 6)
+plot_data <- as.data.frame(did_means_unpred) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in Unpredictability Scale")
+
+#Graph for shortnotice
+plot_data <- as.data.frame(did_means_shortnotice) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in Less than 2 weeks notice")
+
+#Graph for timing
+plot_data <- as.data.frame(did_means_timing) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in shift change")
+
+#Graph for timingpay
+plot_data <- as.data.frame(did_means_timingpay) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in shift change without pay")
+
+#Graph for clopen
+plot_data <- as.data.frame(did_means_clopen) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in Clopening Shift")
+
+#Graph for oncall shift
+plot_data <- as.data.frame(did_means_oncall) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in On-Call shift")
+
+#Graph for cancel without pay
+plot_data <- as.data.frame(did_means_cancelpay) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in Cancellation without pay")
+
+```
+The dashed vertical line indicates the point of time when the Seattle Scheduling Ordinance went into effect.Y1 and Y2 values are difference-in-difference estimates, which represent changes relative to baseline for Seattle and comparison workers. The 95% confidence intervals are indicated by gray shading around the middle line (adjusted mean) of each groups. As we can see from the graphs, 3 variables under the work schedule category : Change in Unpredictability, Change in less than 2 weeks,and Change in shifts without pay. were affected by the law as indicated by the non-overlapping CIs.
+
+
+```{r figure 2}
+
+#Change in Happiness
+did_model_happy <- lm(happy ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_happy <- emmeans(did_model_happy, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+plot_data <- as.data.frame(did_means_happy) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in Happiness")
+
+#Change in Distress
+did_model_distress <- lm(distressed ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_distress <- emmeans(did_model_distress, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+plot_data <- as.data.frame(did_means_distress) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in Distress")
+
+#Change in Goodsleep
+did_model_goodsleep <- lm(goodsleep ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_goodsleep <- emmeans(did_model_goodsleep, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+plot_data <- as.data.frame(did_means_goodsleep) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in Good or Very Good Sleep")
+
+#Change in Hardship
+did_model_hardship <- lm(hardship ~ factor(period) * seattle_treat + 
+                factor(age) + female + factor(race) + factor(educ) + enrolled + 
+                factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                factor(subsector), 
+                data = seattle_full, weights = acs_weight)
+
+did_means_hardship <- emmeans(did_model_hardship, specs = ~ factor(period) | seattle_treat, 
+                     nuisance = nuisance_vars, weights = "proportional")
+
+plot_data <- as.data.frame(did_means_hardship) %>%
+  group_by(seattle_treat) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data, aes(x = factor(period), y = relative_mean, 
+                      group = factor(seattle_treat), 
+                      color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  geom_vline(xintercept = 1.5, linetype = "dashed") + 
+  labs(x = "Period (0=Blin, 1=Y1, 2=Y2)", 
+       y = "Change in Hardship")
+
+
+```
+The same method was used to compare variables that indicate well-being. With the same meaning as the first graph, non-overlapping CIs on the second year suggest that seattle workers experienced increase in happiness, good sleep, and a decrease in any material hardship. 
+
+
+```{r table 3}
+# Define the two scenarios: 
+# 3 = Average Unpredictability (Current Reality)
+# 0 = Zero Unpredictability (Ideal Scenario)
+scenarios <- list(unpred_hat = c(3, 0))
+
+# 1. Happiness Predictions
+pred_happy <- emmeans(second_stage_probit, ~ unpred_hat, 
+                      at = scenarios, 
+                      nuisance=nuisance_vars,
+                      type = "response") # 'response' converts it to probability
+
+# 2. Good Sleep Predictions
+pred_sleep <- emmeans(ssp_goodsleep, ~ unpred_hat, 
+                      at = scenarios, 
+                      nuisance=nuisance_vars,
+                      type = "response")
+
+# 3. Material Hardship Predictions
+pred_hardship <- emmeans(ssp_hardship, ~ unpred_hat, 
+                         at = scenarios, 
+                          nuisance=nuisance_vars,
+                         type = "response")
+
+# Print the results to match Table 3
+cat("\n--- TABLE 3 REPLICATION: PREDICTED VALUES ---\n")
+
+cat("\n[Happiness] (Paper: 0.68 vs 0.92)\n")
+print(pred_happy)
+
+cat("\n[Good Sleep] (Paper: 0.31 vs 0.80)\n")
+print(pred_sleep)
+
+cat("\n[Material Hardship] (Paper: 0.64 vs 0.19)\n")
+print(pred_hardship)
+```
+
+
+
+
+
+```{r possible extension : Difference-in-Difference-in-Difference}
+nuisances <- c("age", "race", "educ", "enrolled", "cohabstatus", "kids", "manager", "jobtenure", "subsector")
+
+# New Model with Triple Interaction: factor(period) * seattle_treat * female
+did_model_gender <- lm(goodsleep ~ factor(period) * seattle_treat * female + 
+                       factor(age) + factor(race) + factor(educ) + enrolled + 
+                       factor(cohabstatus) + kids + manager + factor(jobtenure) + 
+                       factor(subsector), 
+                       data = seattle_full, weights = acs_weight)
+
+gender_means <- emmeans(did_model_gender, 
+                        specs = ~ factor(period) | seattle_treat + female, 
+                        nuisance = nuisances, 
+                        weights = "proportional")
+
+plot_data_gender <- as.data.frame(gender_means) %>%
+  group_by(seattle_treat, female) %>%
+  mutate(relative_mean = emmean - emmean[period == 0],
+         lower_ci = relative_mean - (emmean - lower.CL),
+         upper_ci = relative_mean + (upper.CL - emmean))
+
+ggplot(plot_data_gender, aes(x = factor(period), y = relative_mean, 
+                             group = factor(seattle_treat), 
+                             color = factor(seattle_treat))) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +
+  facet_wrap(~ female, labeller = as_labeller(c("0" = "Men", "1" = "Women"))) + # Creates side-by-side plots
+  geom_vline(xintercept = 1.5, linetype = "dashed") +
+  labs(title = "Effect of SSO on Unpredictability by Gender",
+       x = "Period", y = "Change from Baseline")
+
+```
