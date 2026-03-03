@@ -1,0 +1,269 @@
+\documentclass{article}
+\usepackage[top=0.92in, bottom=0.56in, left=0.64in, right=0.64in]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{parskip}
+\usepackage[numbers]{natbib}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\setlength{\parindent}{15pt}
+\newcounter{quote}
+\newcommand{\qcode}{S\refstepcounter{quote}\thequote}
+
+\begin{document}
+	
+	
+	\begin{flushleft}
+	{\LARGE \textbf{Replication-Mini-Project: Revisiting the Effects of Work Schedule Uncertainty on Health and Economic Security}} \\
+	
+	\vspace{20pt}
+	
+	\uppercase{Lah Hong Wai}, Bauhaus-Universität Weimar \\
+	\uppercase{Xavier Julian Theodosius}, Bauhaus-Universität Weimar
+	\end{flushleft}
+	
+	% abstract
+	
+	\vspace{20pt}
+	\hrule
+	
+	Test
+	
+	\vspace{5pt}
+	\hrule
+	
+	% introduction
+	\section{Introduction}
+	
+	Work schedule uncertainty \textemdash~such as last minute changes, on-call shifts, and last-minute schedule changes \textemdash~has become increasingly common in low- and middle-wage labor markets. Prior research suggests that these problems may have important implications for workers’ health and economic security.
+	
+	In Improving Health and Economic Security by Reducing Work Schedule Uncertainty \cite{harknett2021}, the authors examine the effects of Seattle's Secure Scheduling ordinance towards workers, by ensuring greater schedule predictability. They found evidence that the law
+	had positive effects on workers’ schedule predictability and stability which improved their well-being. They have also investigated causal effects of schedule predictability on well-being outcomes, and discovered that there was a substantial effect.
+	
+	The purpose of this report is twofold. The original study's main results were first replicated using the authors’ data, but implemented simplified methods, preserving key variables of the original study. In addition to replication, this report extends the original analysis by examining interaction effect between workers' schedule predictability and job seniority, available in the dataset \cite{harknett2021data}. This extension assesses whether worker well-being outcomes differ across seniority.
+	
+	\section{Study Design}
+	
+	\subsection{Primary Research Question \& Expectations/Hypotheses}
+	
+	The original study is motivated by whether precarious working conditions have meaningful consequences for workers' well being. Thus, the authors intended to explore if increasing schedule predictability can improve worker well-being. Supported by the Seattle Secure Scheduling ordinance, they desired to explore whether regulations targeting scheduling practices can mitigate this problem.
+	
+	The paper addresses whether labour policies can influence workers' outcomes, and the relevance of authorities in influencing schedule unpredictability towards economic disparities. The ordinance therefore provided an opportunity to examine these questions by evaluating changes in worker outcomes following a mandated increase in schedule predictability.
+	
+	The study analysis was led with several testable hypothesis. These hypothesis were not outlined explicitly, but could be extracted from their results. First, they hypothesised that workers covered by the Seattle Secure Scheduling ordinance benefits in the health and economic security as compared to the non-covered workers. Second, they hypothesised that increased work schedule probability is associated with better well-being, such as increased happiness and better sleep quality.
+	
+	\subsection{Study Type, Design and Conditions}
+	
+	The authors utilised an observational field design to evaluate the effects of the ordinance on the workers' health and economic outcomes. The observational design was possible as the policy was implemented at a city level, rather than random assignment by researchers. This affected every type of workers included in the ordinance, making the experiment natural.
+	
+	While the ordinance covered a large scale of workers, the authors limited the sample to hourly retail and food service workers in Seattle. They employed a between-group structure, separating into two groups named Treatment Group and Comparison Group. The treatment groups included participants covered by the legislation, and comparison groups covered by the law, in same companies of multi-state employers but employed in other cities. Outcomes are measured over time, spanning a baseline period prior to the policy implementation to two years: $Y0, Y1, Y2$, after the ordinance took effect.
+
+	Data were collected in a real-world setting using survey responses conducted online, through a self-reporting nature. This was done over every period, enabling authors to track individual changes over time while comparing them across treatment and comparison groups.
+	
+	In addition to the policy-based comparison, the study examines the relationship between schedule predictability and worker outcomes using regression-based analyses. These analyses enabled the authors to assess whether increased predictability is linked to improved health and economic security.
+
+	\subsection{Data Collection, Participants and Exclusion Criteria}
+	
+	The study relies on survey data collected from the workers in Seattle and comparison cities. The population of interest consisted of service-sector workers employed at large firms under, but not necessarily covered by the ordinance. These large firms spanned multi-state, therefore branches residing in other cities were not involved.
+	
+	\subsubsection{Recruitment}
+	
+	Participants were recruited through online strategies designed to reach service-sector workers. Workers were screened for eligibility based on several criteria:
+	
+	\begin{itemize}
+		\item Employment in retail or food service
+		\item Hourly pay.
+		\item Employment at a large firm covered by the ordinance \textemdash~ this was determined by cross-referencing employers with official records and databases.
+		\item Geographic locations in Seattle (treatment group) or comparison cities (comparison group).
+	\end{itemize}
+	
+	The study did not rely on random sampling, thus participants were not randomly selected from all eligible workers. The recruitment produced a non-probability sample of workers meeting the eligibility criteria. This sample may not be fully representative of the true population of retail and food service workers.
+	
+	\subsubsection{Inclusion Criteria}
+	
+	Besides the mentioned screening criteria, additional criteria were enforced for better data analysis of the two groups.
+	
+	\begin{itemize}
+		\item Wage higher than the federal minimum wage.
+		\item Employed in metropolitan areas with at least 1 million population \textemdash~ eventually listing 24 areas.
+	\end{itemize}
+	
+	The authors highlighted that this sector had high turnover, therefore required re-interview of the baseline batch of respondents in addition to replenishing subsequent waves. For respondents who surveyed multiple times, standard errors were adjusted for non-independent observations. These waves were essential to measure changes over time, for the authors' difference-in-differences analysis.
+	
+ 	\subsubsection{Exclusion Criteria}
+ 	
+ 	Workers were excluded if they:
+ 	
+	\begin{itemize}
+ 		\item Worked outside of the chosen sectors.
+ 		\item Paid by non-hourly basis.
+ 		\item Worked at firms non-relevant to the ordinance.
+ 	\end{itemize}
+ 	
+ 	Data from respondents who did not fill up the survey completely were however not excluded, and the authors performed imputation to substitute the missing values.
+ 	
+ 	\subsubsection{Compensation}
+ 	
+ 	No compensation for the respondents was mentioned in this study.
+ 	
+ 	\subsubsection{Data Collection}
+ 	
+ 	Data were collected through structured surveys administered at multiple defined periods (baseline, follow up waves). The surveys focused on:
+ 	
+	\begin{itemize}
+ 		\item Work schedule predictability,
+ 		\item Health outcomes (e.g., psychological distress, sleep quality),
+ 		\item Employment characteristics (e.g., job sector, roles),
+ 	\end{itemize} 
+ 	
+ 	The study relied on self-reported survey data, where potential sources of measurement errors may surface:
+ 	
+	\begin{itemize}
+ 		\item Recall bias from reporting schedules,
+ 		\item Non-response bias due to survey dropout,
+ 		\item Coverage bias due to non-random recruitment method,
+ 		\item Social desirability bias in reporting health outcomes.
+ 	\end{itemize} 
+ 	
+ 	Since the authors reported that there were incomplete survey data, this may lead to attrition bias, which could bias estimates.
+ 	
+
+	\section{Analysis}
+	\subsection{Dependent Variables}
+	The dependent variables used to observe the effects of the ordinance fall into two main categories :
+	\begin{enumerate}
+		\item Work Schedule Outcomes :
+		\begin{itemize}
+			\item Individual Metrics : These include six variables such as receiving less than 2 weeks notice, last-minute schedule changes, changes without pay, "clopening" shifts, being on-call, and shift cancellations without pay.
+			\item Summary Scale : The researchers also used the total 0-6 unpredictability scale as a dependent variable to see if the law reduced overall uncertainty.
+		\end{itemize}
+		\item Worker Well-Being Outcomes : 
+		\begin{itemize}
+			\item Happiness
+			\item Psychological distress
+			\item Good sleep
+			\item Any material hardship
+		\end{itemize}
+	\end{enumerate} 
+	
+	In considering the validity of the measurements, we believe that the use of a summary scale (0-6) is a strong way to capture the "intensity" of work. However, assigning equal weight to a "cancelled shift" and "receiving less than 2 weeks notice" might oversimplify the lived experience of the worker. 
+	
+	\subsection{Independent Variables}
+	To investigate the effects of the ordinance, researchers used the following independent variables :
+	\begin{enumerate}
+		\item Exposure to the Seattle Secure Scheduling Ordinance : In the main analysis, researchers compare workers in Seattle (the treatment group) to workers in other large U.S. cities (the comparison group) before and after the law started.
+		\item Schedule Unpredictability Scale : In the secondary analysis, researchers used a 0-6 scale of schedule unpredictability as an independent variable to predict worker well-being. This scale is a sum of six different types of scheduling issues.
+	\end{enumerate} 
+	
+		In considering the validity of the measurements, we believe that the between-group design (Seattle vs. other cities) is suitable to isolate the effect of the law from the economic trends. By using multi-state employers, the researchers ensured that the comparison group is as similar as possible to the treatment group.
+		
+	\subsection{Statistical Models and Replication}
+	\subsubsection{Difference-in-Difference Model (DiD)}
+	The Difference-in-Difference (DiD) model was used to test whether the Seattle ordinance caused a change in scheduling and well-being compared to other cities. The equation is displayed in Equation \ref{eq:difference_in_differences}
+	
+	\begin{equation}
+		\begin{split}
+			Y_{it} = \alpha &+ \beta X_{it} + \gamma Seattle_{it} + \delta YearOne + \mu Seattle_{it}YearOne \\
+			&+ \pi YearTwo + \rho Seattle_{it}YearTwo + \epsilon_{it}
+			\label{eq:difference_in_differences}
+		\end{split}
+	\end{equation}
+	
+	In the equation, \textit{Y} is an outcome of interest for individual \textit{i} at time \textit{t} (where time can be baseline, year 1, or year 2); \textit{X} is a vector of individual-level control variables, such as age, gender, race, educational attainment, school enrollment, marital status, presence of children in household, job tenure, managerial status, and  industry subsector ; \textit{Seattle} variable is a binary value where 1 is for the "Seattle treatment group" and 0 is for the "Comparison group"; \textit{YearOne} is valued as 1 for the first year after the law is active and is 0 otherwise; \textit{YearTwo} is valued as 1 for the second year after the law is active and is 0 otherwise; $\text{Seattle}_{it} YearOne$ and $\text{Seattle}_{it} YearTwo$ are interaction terms that will be valued as 1 for members that belong to the treatment group in the first and second year, respectively, and 0 otherwise. $\pi$ and $\rho$ are coefficients that represent the effect of the law on outcome \textit{Y} after 1 and 2 y following implementation.
+	
+	\begin{figure}[h]
+		\includegraphics[width=0.5\columnwidth]{figures/did_replication.jpeg}		
+		\includegraphics[width=0.5\columnwidth]{figures/did_original.jpeg}
+		\caption{Graph Comparison}
+		\label{fig:comparison}
+	\end{figure}
+	
+	The graph on the left side of Figure \ref{fig:comparison} shows our replicated Difference-in-Difference (DiD) result, while the graph on the right side shows the original finding. The visual alignment of the trend lines presents the downward trajectory of the 'treatment' effect in both versions. However, deviations are present in the confidence intervals (CIs). While 5 out of 7 of the authors' CIs for Year 2 are not overlapping, our replication only produced 3 graph that does not overlap. We believe that this is a consequence of using only a single imputed dataset instead of pooling multiple generated sets.
+	
+	\subsubsection{Two-Stage Least Squares (2SLS) Model}
+	
+	The Two-Stage Least Squares (2SLS) Model was used to predict well-being outcomes based on schedule unpredictability. In the first stage, the researchers treated working in Seattle after the law was active as the exogenous treatment, which was used to predict the endogenous schedule unpredictability scale (Eq. \ref{eq:2sls_1}). In the second stage, the predicted value for the schedule unpredictability scale was used to predict well-being outomces(Eq. \ref{eq:2sls_2}).
+	
+	\begin{equation}
+	\begin{split}
+		Sched_{it} = \alpha &+ \beta X_{it} + \gamma Seattle_{it} + \delta YearOne + \mu Seattle_{it}YearOne \\
+		&+ \pi YearTwo + \rho Seattle_{it}YearTwo + \epsilon_{it}
+		\label{eq:2sls_1}
+	\end{split}
+	\end{equation}
+	\begin{equation}
+	\begin{split}
+		Y_{it} = \alpha &+ \beta X_{it} + \gamma Seattle_{it} + \delta YearOne +
+		 \pi YearTwo + \rho Sched_{it}
+		\label{eq:2sls_2}
+	\end{split}
+	\end{equation}
+	
+	The researchers used the ivprobit command in Stata in order to estimate the first and second stages while the replication used a manual method in R, hence allowing the possibility of the method being a second source of deviation. 
+	
+	\begin{figure}[h]
+		\centering	
+		\includegraphics[width=0.5\columnwidth]{figures/sls_original.jpeg}
+		\caption{Paper's predicted values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
+		\label{fig:sls_original}
+	\end{figure}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.5\columnwidth]{figures/sls_replication.jpeg}		
+		\caption{Paper's predicted values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
+		\label{fig:slscomparison}
+	\end{figure}
+	
+	The model fit may be able to be confirmed by the similarity between the replication (Fig. \ref{fig:slscomparison}) and the original study (Fig. \ref{fig:sls_original}). For example, the replicated model predicts a baseline happiness of 71.2\%, which is quite close to the authors' 68\%. However, the replicated model produced less dramatic results compared to the authors' (e.g., 62.8\% for sleep vs. the paper's 80\%). The deviation in results may also be the consequence of using only one imputed dataset.
+	
+	\section{Interpretation}
+	\subsection{Interpretation of The Statistical Results and P-values}
+	
+	The authors conclude that the Seattle ordinance had a positive on 'quality of life', However, a closer look at the statistical results would reveal that this claim is only partially supported. While the improvement in Good Sleep and Material Hardship were statistically significant, the impact on Happiness and Psychological Distress was not significant in the Difference-in-Differences analysis. By grouping these variables together under the term 'quality of life', the researchers risk overstating the law's effect on mental well-being.
+	
+	\subsection{Inferences Made About The Target Population and The World}
+	
+	While the study design effectively captured the immediate impact of the Seattle ordinance on work schedules. The reliance on self-reported survey data may have introduced potential bias as workers may misreport schedules or well-being outcomes. Furthermore, while the law clearly 'caused' better schedules, the claim that it changes 'quality of life' may not be fully supported by the experimental design that is restricted by other unobserved variables and the limited timeframe.
+	
+	\subsection{Judgement of The Credibility of The Study's Conclusions}
+	
+	Based on our analysis, we are convinced that the Seattle ordinance provides an improvement in schedule predictability. However, as stated in the previous subsections, the claim on well-being improvements may be exaggerated as there are many factors other than schedule predictability that affects both mental and physical well-being of the workers.
+	
+	\section{Extension}
+	
+	In the data collection, the authors collected employment details such as job roles, tenures and job seniority. Therefore in extension to the original analysis, we explored the effect of schedule predictability towards well-being outcomes based on job position, that is, whether the respondent was a manager, by using interaction terms. Predicted values of well-being outcomes were computed to facilitate interpretation of the interaction effects.
+	
+	\subsection{Analysis}
+	
+	\subsubsection{Simplified Approach}
+	In predicting values for well-being outcomes (the second analysis of the paper), the authors used Stata for their data analysis. Due to the type of data, they employed a two-step approach: ordinary least squares method followed by probit regression. The first step was most likely utilised due to the endogenuity behaviour of schedule unpredictability \textemdash~ data may include unobserved traits such as stress tolerance \textemdash~ which meant that estimating well-being outcome with the unpredictability scale will result in a biased estimate. To eliminate this bias, they used Instrumental Variables (IV), which affects outcome only through the unpredictability. After a predicted, exogenous version of unpredictability was produced, this went through the second step. Probit was used as the outcome was binary, and also a standard in Stata when IV was involved. Therefore, the original study accounted variation across both time and groups to isolate causal effects of the ordinance.
+	
+	Our extension adopts of a simplified approximation, focusing on association between schedule predictability and well-being. While this approach does not replicate the strategy of the original study, this allows for examining heterogeneous effects by managerial role.  Without the use of IV, our approach was a one-step approach, with the following characteristics:
+	
+	\begin{enumerate}
+		\item Outcome: Four predicted well-being binary outcomes (happy, distressed, good sleep, hardship).
+		\item Role: Manager (1) and non-manager (0).
+		\item Model: Baseline model to interaction model.
+		\item Regression type: Logistic regression model.
+	\end{enumerate}
+	
+	A baseline model was used to examine independent effects of unpredictability and managerial role. This was then processed over the interaction model to investigate the association of schedule predictability and well-being by roles. Since our approach used a logit model, we used a robustness check to compare logit and probit model to observe differences.
+	
+	The estimates presented in this section should be interpreted as associations rather than causal effects, as reported by the authors.
+	
+	\subsubsection{Data and Empirical Strategy}
+	
+	The original study addressed missing data using multiple imputation and pool estimates. However, the present analysis relies on a single imputed dataset due to absence of a unique id to apply Rubin's Rule and use of a different software for analysis. While this approach preserved the structure of the data, the variance estimates did not include between-imputation variability \textemdash~ the extra variance due to missing data \textemdash~ potentially leading to underestimated standard errors.
+	
+	\subsection{Results}
+	
+	
+	
+
+	% bibliography
+	\bibliographystyle{ACM-Reference-Format}
+	\bibliography{references}
+	
+	
+\end{document}
