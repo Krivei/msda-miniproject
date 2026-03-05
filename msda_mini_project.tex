@@ -1,0 +1,274 @@
+\documentclass{article}
+\usepackage[top=0.92in, bottom=0.56in, left=0.64in, right=0.64in]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{parskip}
+\usepackage[numbers]{natbib}
+\usepackage{url}
+\usepackage{subcaption}
+\usepackage{graphicx}
+
+\setlength{\parindent}{15pt}
+
+\newcounter{quote}
+\newcommand{\qcode}{S\refstepcounter{quote}\thequote}
+
+\begin{document}
+	
+	
+	\begin{flushleft}
+	{\LARGE \textbf{Replication-Mini-Project: Revisiting the Effects of Work Schedule Uncertainty on Health and Economic Security}} \\
+	
+	\vspace{20pt}
+	
+	\uppercase{Lah Hong Wai}, Bauhaus-Universität Weimar \\
+	\uppercase{Xavier Julian Theodosius}, Bauhaus-Universität Weimar
+	\end{flushleft}
+	
+	% abstract
+	
+	\vspace{20pt}
+	\hrule
+	
+	Test
+	
+	\vspace{5pt}
+	\hrule
+	
+	% introduction
+	\section{Introduction}
+	
+	Work schedule uncertainty \textemdash~such as last minute changes, on-call shifts, and last-minute schedule changes \textemdash~has become increasingly common in low- and middle-wage labor markets. Prior research suggests that these problems may have important implications for workers’ health and economic security.
+	
+	In Improving Health and Economic Security by Reducing Work Schedule Uncertainty \cite{harknett2021}, the authors examine the effects of Seattle's Secure Scheduling ordinance towards workers, by ensuring greater schedule predictability. They found evidence that the law
+	had positive effects on workers’ schedule predictability and stability which improved their well-being. They have also investigated causal effects of schedule predictability on well-being outcomes, and discovered that there was a substantial effect.
+	
+	The purpose of this report is twofold. The original study's main results were first replicated using the authors’ data, but implemented simplified methods, preserving key variables of the original study. In addition to replication, this report extends the original analysis by examining interaction effect between workers' schedule predictability and job seniority, available in the dataset \cite{harknett2021data}. This extension assesses whether worker well-being outcomes differ across seniority.
+	
+	\section{Study Design}
+	
+	\subsection{Primary Research Question \& Expectations/Hypotheses}
+	
+	The original study is motivated by whether precarious working conditions have meaningful consequences for workers' well being. Thus, the authors intended to explore if increasing schedule predictability can improve worker well-being. Supported by the Seattle Secure Scheduling ordinance, they desired to explore whether regulations targeting scheduling practices can mitigate this problem.
+	
+	The paper addresses whether labour policies can influence workers' outcomes, and the relevance of authorities in influencing schedule unpredictability towards economic disparities. The ordinance therefore provided an opportunity to examine these questions by evaluating changes in worker outcomes following a mandated increase in schedule predictability.
+	
+	The study analysis was led with several testable hypothesis. These hypothesis were not outlined explicitly, but could be extracted from their results. First, they hypothesised that workers covered by the Seattle Secure Scheduling ordinance benefits in the health and economic security as compared to the non-covered workers. Second, they hypothesised that increased work schedule probability is associated with better well-being, such as increased happiness and better sleep quality.
+	
+	\subsection{Study Type, Design and Conditions}
+	
+	The authors utilised an observational field design to evaluate the effects of the ordinance on the workers' health and economic outcomes. The observational design was possible as the policy was implemented at a city level, rather than random assignment by researchers. This affected every type of workers included in the ordinance, making the experiment natural.
+	
+	While the ordinance covered a large scale of workers, the authors limited the sample to hourly retail and food service workers in Seattle. They employed a between-group structure, separating into two groups named Treatment Group and Comparison Group. The treatment groups included participants covered by the legislation, and comparison groups covered by the law, in same companies of multi-state employers but employed in other cities. Outcomes are measured over time, spanning a baseline period prior to the policy implementation to two years: $Y0, Y1, Y2$, after the ordinance took effect.
+
+	Data were collected in a real-world setting using survey responses conducted online, through a self-reporting nature. This was done over every period, enabling authors to track individual changes over time while comparing them across treatment and comparison groups.
+	
+	In addition to the policy-based comparison, the study examines the relationship between schedule predictability and worker outcomes using regression-based analyses. These analyses enabled the authors to assess whether increased predictability is linked to improved health and economic security.
+
+	\subsection{Data Collection, Participants and Exclusion Criteria}
+	
+	The study relies on survey data collected from the workers in Seattle and comparison cities. The population of interest consisted of service-sector workers employed at large firms under, but not necessarily covered by the ordinance. These large firms spanned multi-state, therefore branches residing in other cities were not involved.
+	
+	\subsubsection{Recruitment}
+	
+	Participants were recruited through online strategies designed to reach service-sector workers. Workers were screened for eligibility based on several criteria:
+	
+	\begin{itemize}
+		\item Employment in retail or food service
+		\item Hourly pay.
+		\item Employment at a large firm covered by the ordinance \textemdash~ this was determined by cross-referencing employers with official records and databases.
+		\item Geographic locations in Seattle (treatment group) or comparison cities (comparison group).
+	\end{itemize}
+	
+	The study did not rely on random sampling, thus participants were not randomly selected from all eligible workers. The recruitment produced a non-probability sample of workers meeting the eligibility criteria. This sample may not be fully representative of the true population of retail and food service workers.
+	
+	\subsubsection{Inclusion Criteria}
+	
+	Besides the mentioned screening criteria, additional criteria were enforced for better data analysis of the two groups.
+	
+	\begin{itemize}
+		\item Wage higher than the federal minimum wage.
+		\item Employed in metropolitan areas with at least 1 million population \textemdash~ eventually listing 24 areas.
+	\end{itemize}
+	
+	The authors highlighted that this sector had high turnover, therefore required re-interview of the baseline batch of respondents in addition to replenishing subsequent waves. For respondents who surveyed multiple times, standard errors were adjusted for non-independent observations. These waves were essential to measure changes over time, for the authors' difference-in-differences analysis.
+	
+ 	\subsubsection{Exclusion Criteria}
+ 	
+ 	Workers were excluded if they:
+ 	
+	\begin{itemize}
+ 		\item Worked outside of the chosen sectors.
+ 		\item Paid by non-hourly basis.
+ 		\item Worked at firms non-relevant to the ordinance.
+ 	\end{itemize}
+ 	
+ 	Data from respondents who did not fill up the survey completely were however not excluded, and the authors performed imputation to substitute the missing values.
+ 	
+ 	\subsubsection{Compensation}
+ 	
+ 	No compensation for the respondents was mentioned in this study.
+ 	
+ 	\subsubsection{Data Collection}
+ 	
+ 	Data were collected through structured surveys administered at multiple defined periods (baseline, follow up waves). The surveys focused on:
+ 	
+	\begin{itemize}
+ 		\item Work schedule predictability,
+ 		\item Health outcomes (e.g., psychological distress, sleep quality),
+ 		\item Employment characteristics (e.g., job sector, roles),
+ 	\end{itemize} 
+ 	
+ 	The study relied on self-reported survey data, where potential sources of measurement errors may surface:
+ 	
+	\begin{itemize}
+ 		\item Recall bias from reporting schedules,
+ 		\item Non-response bias due to survey dropout,
+ 		\item Coverage bias due to non-random recruitment method,
+ 		\item Social desirability bias in reporting health outcomes.
+ 	\end{itemize} 
+ 	
+ 	Since the authors reported that there were incomplete survey data, this may lead to attrition bias, which could bias estimates.
+ 	
+
+	\section{Analysis}
+	
+	\section{Interpretation}
+	
+	\section{Extension}
+	
+	In the data collection, the authors collected employment details such as job roles, tenures and job seniority. These variables were part of the controls involved in the well-being estimates. For the extension to the original analysis, we explored the effect of schedule predictability towards well-being outcomes based on job position, that is, whether the respondent was a manager, by using interaction terms. Predicted values of well-being outcomes were computed to facilitate interpretation of the interaction effects.
+	
+	\subsection{Analysis}
+	
+	\subsubsection{Simplified Approach}
+	In predicting values for well-being outcomes (the second analysis of the paper), the authors used Stata for their data analysis. Due to the type of data, they employed a two-step approach: ordinary least squares method followed by probit regression. The first step was most likely utilised due to the endogenuity behaviour of schedule unpredictability \textemdash~ data may include unobserved traits such as stress tolerance \textemdash~ which meant that estimating well-being outcome with the unpredictability scale will result in a biased estimate. To eliminate this bias, they used Instrumental Variables (IV), which affects outcome only through the unpredictability. After a predicted, exogenous version of unpredictability was produced, this went through the second step. Probit was used as the outcome was binary, and also a standard in Stata when IV was involved. Therefore, the original study accounted variation across both time and groups to isolate causal effects of the ordinance.
+	
+	Our extension adopts of a simplified approximation, focusing on association between schedule predictability and well-being. While this approach does not replicate the strategy of the original study, this allows for examining heterogeneous effects by managerial role.  Without the use of IV, our approach was a one-step approach, with the following characteristics:
+	
+	\begin{enumerate}
+		\item Outcome: Four predicted well-being binary outcomes (happy, distressed, good sleep, hardship).
+		\item Role: Manager (1) and non-manager (0).
+		\item Model: Baseline model to interaction model.
+		\item Regression type: Logistic regression model.
+	\end{enumerate}
+	
+	A baseline model was used to examine independent effects of unpredictability and managerial role. This was then processed over the interaction model to investigate the association of schedule predictability and well-being by roles. Since our approach used a logit model, we used a robustness check to compare logit and probit model to observe differences.
+	
+	The estimates presented in this section should be interpreted as associations rather than causal effects, as reported by the authors.
+	
+	\subsubsection{Data and Empirical Strategy}
+	
+	The original study addressed missing data using multiple imputation and pool estimates. However, the present analysis relies on a single imputed dataset due to absence of a unique id to apply Rubin's Rule and use of a different software for analysis. While this approach preserved the structure of the data, the variance estimates did not include between-imputation variability \textemdash~ the extra variance due to missing data, and thus it was acknowledged that underestimated standard errors could be possible.
+	
+	\subsection{Results}
+	
+	Table~\ref{tab:p_baseline} presents results from the baseline logistic regression model estimating the association between schedule unpredictability and the probability of reporting a high well-being. The estimates imply that increasing the number of types of schedule unpredictability lead to statistically significant results in every well-being, where workers experience a reduction in happiness, an increase in psychological distress, a lower quality of good sleep and increased experience of at least one material hardship.  
+	
+	\begin{table}[h]
+		\caption{Logit coefficients from the baseline models. Models include control for only managerial status. This specification does not involve the two-way method or instrumental variable approach used in the original study. ***p < 0.001, **p < 0.01, *p < 0.05}
+		\label{tab:p_baseline}
+	\begin{tabularx}{\textwidth}{ l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X }
+
+		\toprule
+		 & Happiness & Psychological distress & Good sleep & Hardship \\
+		\midrule
+		Unpred. coef. & -0.157*** & 0.303*** & -0.214*** & 0.207*** \\
+		Unpred. std. error & (0.009) & (0.010) & (0.009) & (0.009) \\
+		Manager coef. & -0.014 & -0.109** & -0.094** & 0.023 \\
+		Manager std. error & (0.037) & (0.036) & (0.036) & (0.034) \\
+		\bottomrule
+	\end{tabularx}
+	\end{table}
+	
+	Figure~\ref{fig:baseline_models} shows the prediction of well-being with different levels of schedule unpredictability. Workers were predicted to have a reduction in happiness and sleep quality with an increasing level of unpredictability. The estimates suggest that eliminating schedule unpredictability will increase happiness by about 18 to 19 percentage points (from 63\% to 81\%). Furthermore, this can also increase reports of sleep quality by 27 percentage points (from 20\% to 47\%), decrease reports of distress by 39 perecentage points (from 55\% to 16\%) and material hardship by 28 percentage points (from 76\% to 48\%). These results suggest that reducing schedule unpredictability is associated with better well-being on average across workers. With this, we observed results by managerial roles through interaction.
+	
+	\begin{table}[h]
+		\caption{Logit coefficients from the interaction models. Models involve interaction between schedule unpredictability and managerial status. Managerial status was represented with binary values: 0 (not a manager) or 1 (manager). The interaction is labelled as Unpred:manager. ***p < 0.001, **p < 0.01, *p < 0.05}
+		\label{tab:p_interaction}
+		\begin{tabularx}{\textwidth}{ l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X }
+			
+			\toprule
+			& Happiness & Psychological distress & Good sleep & Hardship \\
+			\midrule
+			Unpred. coef. & -0.141*** & 0.291*** & -0.206*** & 0.193*** \\
+			Unpred. std. error & (0.011) & (0.011) & (0.011) & (0.010) \\
+			Manager coef. & 0.242** & -0.310*** & -0.021 & -0.171* \\
+			Manager std. error & (0.086) & (0.088) & (0.073) & (0.023) \\
+			Unpred:manager coef. & -0.083*** & 0.063* & -0.043 & 0.070** \\
+			Unpred:manager std.error & (0.001) & (0.025) & (0.024) & (0.023) \\
+			\bottomrule
+		\end{tabularx}
+	\end{table}
+	
+	\begin{figure}[h]
+		\centering
+		\begin{subfigure}{0.49\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{figures/baseline_happy.png}
+			\subcaption{Baseline model of happiness.}
+		\end{subfigure}
+		\vspace{0.5cm}
+		\begin{subfigure}{0.49\textwidth}
+			\centering	\includegraphics[width=\textwidth]{figures/baseline_distressed.png}
+			\subcaption{Baseline model of distress.}
+		\end{subfigure}
+		\vspace{0.5cm}
+		\begin{subfigure}{0.49\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{figures/baseline_goodsleep.png}
+			\subcaption{Baseline model of good sleep.}
+		\end{subfigure}
+		\begin{subfigure}{0.49\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{figures/baseline_hardship.png}
+			\subcaption{Baseline model of hardship.}
+		\end{subfigure}
+		\caption{Baseline models of well-being outcomes. Each model consists of two roles, manager and non-manager, but they act as controls.}
+		\label{fig:baseline_models}
+	\end{figure}
+	
+	Table~\ref{tab:p_interaction} shows the results of relationship of schedule unpredictability with well-being, contrasted by managerial roles. Results were produced from a second model involving an interaction between schedule unpredictability and managerial status. 	The Table~\ref{tab:p_interaction} estimates suggest that managers experience worse well-being qualities with increasing unpredictability levels. Sleep quality among managers reduce more than non-managers as the unpredictability level increases, but this relationship fell short of statistical significance (p = 0.106). Therefore, schedule unpredictability does not decrease sleep quality for managers than non-managers.
+	
+	Across three well-being probabilities, workers with non-managerial roles are expected to report better results with higher unpredictability levels as compared to the manager counterparts. Figure 2 shows predicted probabilities of the three well-beings: happiness, distress and hardship. 
+	
+	Eliminating unpredictability increases happiness by 17 percentage points (from 64\% to 81\%) for non-managers, and 26 percentage points (from 58\% to 84\%) for managers. Reduction in distress can be reported by 37 percentage points (from 54\% to 17\%) and 43\% (from 56\% to 13\%) for the respective roles. Similar trend can be observed for hardship, with a reduction of 26 percentage points (from 75\% to 49\%) and 35 percentage points (from 79\% to 44\%).
+	
+	For the three well-beings, the figures suggest that managers have worse outcome than non-managers with the higher schedule unpredictability, but have better qualities with decreasing unpredictability levels. 
+	
+	\begin{figure}[t]
+		\centering
+		\begin{subfigure}{0.49\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{figures/interaction_happy.png}
+			\subcaption{Interaction model of happiness.}
+		\end{subfigure}
+		\vspace{0.5cm}
+		\begin{subfigure}{0.49\textwidth}
+			\centering	\includegraphics[width=\textwidth]{figures/interaction_distressed.png}
+			\subcaption{Interaction model of distress.}
+		\end{subfigure}
+		\vspace{0.5cm}
+		\begin{subfigure}{\textwidth}
+			\centering
+			\includegraphics[width=0.49\textwidth]{figures/interaction_hardship.png}
+			\subcaption{Interaction model of hardship.}
+		\end{subfigure}
+		\caption{Interaction models of well-being outcomes. This show the relationship between unpredictability and managerial role on the effect of well being, as a predicted probability.}
+		\label{fig:interaction_models}
+	\end{figure}
+	
+	\subsection{Discussion}
+	
+	This extension examined whether schedule unpredictability is associated with well-being outcomes using a simplified approach. The findings indicate that reducing unpredictability is associated with improvements in several well-being outcomes. Reducing unpredictability increases happiness, and reduces psychological distress and material hardship. These associations are statistically significant.
+	
+	By investigating the effect of managerial roles, we find that managers were affected worse than the non-managers, but a reduction in unpredictability led to an improvement in quality for both roles, and this increase was much better for managers. Specifically, for happiness, managers had lower well-being levels under the highest unpredictability, but showed steeper improvements with decreasing unpredictability compared to non-managers. For distress and hardship, a similar pattern can be observed, suggesting that at low levels of unpredictability, managers report better outcomes. However, with the absence of the original framework used in the original study, these results should be interpreted as evidence for associations rather than casual effects.
+	
+	Overall, these findings are in line with the original study, in that the ordinance can have a positive effect for workers, and more specifically, this effect was applicable for both roles, even though different intensity could be observed.
+
+	% bibliography
+%	\bibliographystyle{ACM-Reference-Format}
+%	\bibliography{references}
+	
+	
+\end{document}
