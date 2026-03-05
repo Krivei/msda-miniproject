@@ -147,17 +147,24 @@
 		\end{itemize}
 	\end{enumerate} 
 	
-	In considering the validity of the measurements, we believe that the use of a summary scale (0-6) is a strong way to capture the "intensity" of work. However, assigning equal weight to a "cancelled shift" and "receiving less than 2 weeks notice" might oversimplify the lived experience of the worker. 
+	Distributions for the dependent variables were not shown because these variables are binary. Instead, we prioritize the visualization of the schedule unpredictability scale, as its continuous distribution allows for a more meaningful assessment between the treatment and comparison groups. In considering the validity of the measurements, we believe that the use of a summary scale (0-6) is a strong way to capture the "intensity" of work. However, assigning equal weight to a "canceled shift" and "receiving less than 2 weeks notice" might oversimplify the lived experience of the worker. 
 	
 	\subsection{Independent Variables}
 	To investigate the effects of the ordinance, researchers used the following independent variables :
 	\begin{enumerate}
 		\item Exposure to the Seattle Secure Scheduling Ordinance : In the main analysis, researchers compare workers in Seattle (the treatment group) to workers in other large U.S. cities (the comparison group) before and after the law started.
 		\item Schedule Unpredictability Scale : In the secondary analysis, researchers used a 0-6 scale of schedule unpredictability as an independent variable to predict worker well-being. This scale is a sum of six different types of scheduling issues.
-	\end{enumerate} 
+	\end{enumerate} 	
 	
-		In considering the validity of the measurements, we believe that the between-group design (Seattle vs. other cities) is suitable to isolate the effect of the law from the economic trends. By using multi-state employers, the researchers ensured that the comparison group is as similar as possible to the treatment group.
-		
+	In considering the validity of the measurements, we believe that the between-group design (Seattle vs. other cities) is suitable to isolate the effect of the law from the economic trends. By using multi-state employers, the researchers ensured that the comparison group is as similar as possible to the treatment group. Fig \ref{sched_dist} shows the baseline (period 0) distribution of schedule unpredictability between the treatment group and the comparison group. The distribution shows a peak at the middle value with relatively small population at the extreme values, showing that the data is not heavily stacked in a single value and justifying the use of a linear model. Furthermore, the similarity in baseline distribution also showed that the two groups are comparable.
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.5\columnwidth]{figures/sched_unpred.jpeg}
+		\caption{Distribution of Schedule Unpredictability}
+		\label{sched_dist}
+	\end{figure}
+	
 	\subsection{Statistical Models and Replication}
 	\subsubsection{Difference-in-Difference Model (DiD)}
 	The Difference-in-Difference (DiD) model was used to test whether the Seattle ordinance caused a change in scheduling and well-being compared to other cities. The equation is displayed in Equation \ref{eq:difference_in_differences}
@@ -173,8 +180,9 @@
 	In the equation, \textit{Y} is an outcome of interest for individual \textit{i} at time \textit{t} (where time can be baseline, year 1, or year 2); \textit{X} is a vector of individual-level control variables, such as age, gender, race, educational attainment, school enrollment, marital status, presence of children in household, job tenure, managerial status, and  industry subsector ; \textit{Seattle} variable is a binary value where 1 is for the "Seattle treatment group" and 0 is for the "Comparison group"; \textit{YearOne} is valued as 1 for the first year after the law is active and is 0 otherwise; \textit{YearTwo} is valued as 1 for the second year after the law is active and is 0 otherwise; $\text{Seattle}_{it} YearOne$ and $\text{Seattle}_{it} YearTwo$ are interaction terms that will be valued as 1 for members that belong to the treatment group in the first and second year, respectively, and 0 otherwise. $\pi$ and $\rho$ are coefficients that represent the effect of the law on outcome \textit{Y} after 1 and 2 y following implementation.
 	
 	\begin{figure}[h]
-		\includegraphics[width=0.5\columnwidth]{figures/did_replication.jpeg}		
-		\includegraphics[width=0.5\columnwidth]{figures/did_original.jpeg}
+		\centering
+		\includegraphics[width=0.4\columnwidth]{figures/did_replication.jpeg}		
+		\includegraphics[width=0.4\columnwidth]{figures/did_original.jpeg}
 		\caption{Graph Comparison}
 		\label{fig:comparison}
 	\end{figure}
@@ -204,14 +212,14 @@
 	
 	\begin{figure}[h]
 		\centering	
-		\includegraphics[width=0.5\columnwidth]{figures/sls_original.jpeg}
+		\includegraphics[width=0.4\columnwidth]{figures/sls_original.jpeg}
 		\caption{Paper's predicted values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
 		\label{fig:sls_original}
 	\end{figure}
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=0.5\columnwidth]{figures/sls_replication.jpeg}		
-		\caption{Paper's predicted values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
+		\includegraphics[width=0.4\columnwidth]{figures/sls_replication.jpeg}		
+		\caption{Replicated prediction values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
 		\label{fig:slscomparison}
 	\end{figure}
 	
