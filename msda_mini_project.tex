@@ -5,10 +5,12 @@
 \usepackage{parskip}
 \usepackage[numbers]{natbib}
 \usepackage{url}
-\usepackage{subcaption}
+\usepackage{amsmath}
 \usepackage{graphicx}
-
+\usepackage{subcaption}
 \setlength{\parindent}{15pt}
+
+
 
 \newcounter{quote}
 \newcommand{\qcode}{S\refstepcounter{quote}\thequote}
@@ -132,12 +134,117 @@
  	
 
 	\section{Analysis}
+	\subsection{Dependent Variables}
+	The dependent variables used to observe the effects of the ordinance fall into two main categories :
+	\begin{enumerate}
+		\item Work Schedule Outcomes :
+		\begin{itemize}
+			\item Individual Metrics : These include six variables such as receiving less than 2 weeks notice, last-minute schedule changes, changes without pay, "clopening" shifts, being on-call, and shift cancellations without pay.
+			\item Summary Scale : The researchers also used the total 0-6 unpredictability scale as a dependent variable to see if the law reduced overall uncertainty.
+		\end{itemize}
+		\item Worker Well-Being Outcomes : 
+		\begin{itemize}
+			\item Happiness
+			\item Psychological distress
+			\item Good sleep
+			\item Any material hardship
+		\end{itemize}
+	\end{enumerate} 
+	
+	Distributions for the dependent variables were not shown because these variables are binary. Instead, we prioritize the visualization of the schedule unpredictability scale, as its continuous distribution allows for a more meaningful assessment between the treatment and comparison groups. In considering the validity of the measurements, we believe that the use of a summary scale (0-6) is a strong way to capture the "intensity" of work. However, assigning equal weight to a "canceled shift" and "receiving less than 2 weeks notice" might oversimplify the lived experience of the worker. 
+	
+	\subsection{Independent Variables}
+	To investigate the effects of the ordinance, researchers used the following independent variables :
+	\begin{enumerate}
+		\item Exposure to the Seattle Secure Scheduling Ordinance : In the main analysis, researchers compare workers in Seattle (the treatment group) to workers in other large U.S. cities (the comparison group) before and after the law started.
+		\item Schedule Unpredictability Scale : In the secondary analysis, researchers used a 0-6 scale of schedule unpredictability as an independent variable to predict worker well-being. This scale is a sum of six different types of scheduling issues.
+	\end{enumerate} 	
+	
+	In considering the validity of the measurements, we believe that the between-group design (Seattle vs. other cities) is suitable to isolate the effect of the law from the economic trends. By using multi-state employers, the researchers ensured that the comparison group is as similar as possible to the treatment group. Fig \ref{sched_dist} shows the baseline (period 0) distribution of schedule unpredictability between the treatment group and the comparison group. The distribution shows a peak at the middle value with relatively small population at the extreme values, showing that the data is not heavily stacked in a single value and justifying the use of a linear model. Furthermore, the similarity in baseline distribution also showed that the two groups are comparable.
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.5\columnwidth]{figures/sched_unpred.jpeg}
+		\caption{Distribution of Schedule Unpredictability}
+		\label{sched_dist}
+	\end{figure}
+	
+	\subsection{Statistical Models and Replication}
+	\subsubsection{Difference-in-Difference Model (DiD)}
+	The Difference-in-Difference (DiD) model was used to test whether the Seattle ordinance caused a change in scheduling and well-being compared to other cities. The equation is displayed in Equation \ref{eq:difference_in_differences}
+	
+	\begin{equation}
+		\begin{split}
+			Y_{it} = \alpha &+ \beta X_{it} + \gamma Seattle_{it} + \delta YearOne + \mu Seattle_{it}YearOne \\
+			&+ \pi YearTwo + \rho Seattle_{it}YearTwo + \epsilon_{it}
+			\label{eq:difference_in_differences}
+		\end{split}
+	\end{equation}
+	
+	In the equation, \textit{Y} is an outcome of interest for individual \textit{i} at time \textit{t} (where time can be baseline, year 1, or year 2); \textit{X} is a vector of individual-level control variables, such as age, gender, race, educational attainment, school enrollment, marital status, presence of children in household, job tenure, managerial status, and  industry subsector ; \textit{Seattle} variable is a binary value where 1 is for the "Seattle treatment group" and 0 is for the "Comparison group"; \textit{YearOne} is valued as 1 for the first year after the law is active and is 0 otherwise; \textit{YearTwo} is valued as 1 for the second year after the law is active and is 0 otherwise; $\text{Seattle}_{it} YearOne$ and $\text{Seattle}_{it} YearTwo$ are interaction terms that will be valued as 1 for members that belong to the treatment group in the first and second year, respectively, and 0 otherwise. $\pi$ and $\rho$ are coefficients that represent the effect of the law on outcome \textit{Y} after 1 and 2 y following implementation.
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.4\columnwidth]{figures/did_replication.jpeg}		
+		\includegraphics[width=0.4\columnwidth]{figures/did_original.jpeg}
+		\caption{Graph Comparison}
+		\label{fig:comparison}
+	\end{figure}
+	
+	The graph on the left side of Figure \ref{fig:comparison} shows our replicated Difference-in-Difference (DiD) result, while the graph on the right side shows the original finding. The visual alignment of the trend lines presents the downward trajectory of the 'treatment' effect in both versions. However, deviations are present in the confidence intervals (CIs). While 5 out of 7 of the authors' CIs for Year 2 are not overlapping, our replication only produced 3 graph that does not overlap. We believe that this is a consequence of using only a single imputed dataset instead of pooling multiple generated sets.
+	
+	\subsubsection{Two-Stage Least Squares (2SLS) Model}
+	
+	The Two-Stage Least Squares (2SLS) Model was used to predict well-being outcomes based on schedule unpredictability. In the first stage, the researchers treated working in Seattle after the law was active as the exogenous treatment, which was used to predict the endogenous schedule unpredictability scale (Eq. \ref{eq:2sls_1}). In the second stage, the predicted value for the schedule unpredictability scale was used to predict well-being outomces(Eq. \ref{eq:2sls_2}).
+	
+	\begin{equation}
+	\begin{split}
+		Sched_{it} = \alpha &+ \beta X_{it} + \gamma Seattle_{it} + \delta YearOne + \mu Seattle_{it}YearOne \\
+		&+ \pi YearTwo + \rho Seattle_{it}YearTwo + \epsilon_{it}
+		\label{eq:2sls_1}
+	\end{split}
+	\end{equation}
+	\begin{equation}
+	\begin{split}
+		Y_{it} = \alpha &+ \beta X_{it} + \gamma Seattle_{it} + \delta YearOne +
+		 \pi YearTwo + \rho Sched_{it}
+		\label{eq:2sls_2}
+	\end{split}
+	\end{equation}
+	
+	The researchers used the ivprobit command in Stata in order to estimate the first and second stages while the replication used a manual method in R, hence allowing the possibility of the method being a second source of deviation. 
+	
+	\begin{figure}[h]
+		\centering	
+		\includegraphics[width=0.4\columnwidth]{figures/sls_original.jpeg}
+		\caption{Paper's predicted values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
+		\label{fig:sls_original}
+	\end{figure}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.4\columnwidth]{figures/sls_replication.jpeg}		
+		\caption{Replicated prediction values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
+		\label{fig:slscomparison}
+	\end{figure}
+	
+	The model fit may be able to be confirmed by the similarity between the replication (Fig. \ref{fig:slscomparison}) and the original study (Fig. \ref{fig:sls_original}). For example, the replicated model predicts a baseline happiness of 71.2\%, which is quite close to the authors' 68\%. However, the replicated model produced less dramatic results compared to the authors' (e.g., 62.8\% for sleep vs. the paper's 80\%). The deviation in results may also be the consequence of using only one imputed dataset.
 	
 	\section{Interpretation}
+	\subsection{Interpretation of The Statistical Results and P-values}
+	
+	The authors conclude that the Seattle ordinance had a positive on 'quality of life', However, a closer look at the statistical results would reveal that this claim is only partially supported. While the improvement in Good Sleep and Material Hardship were statistically significant, the impact on Happiness and Psychological Distress was not significant in the Difference-in-Differences analysis. By grouping these variables together under the term 'quality of life', the researchers risk overstating the law's effect on mental well-being.
+	
+	\subsection{Inferences Made About The Target Population and The World}
+	
+	While the study design effectively captured the immediate impact of the Seattle ordinance on work schedules. The reliance on self-reported survey data may have introduced potential bias as workers may misreport schedules or well-being outcomes. Furthermore, while the law clearly 'caused' better schedules, the claim that it changes 'quality of life' may not be fully supported by the experimental design that is restricted by other unobserved variables and the limited timeframe.
+	
+	\subsection{Judgement of The Credibility of The Study's Conclusions}
+	
+	Based on our analysis, we are convinced that the Seattle ordinance provides an improvement in schedule predictability. However, as stated in the previous subsections, the claim on well-being improvements may be exaggerated as there are many factors other than schedule predictability that affects both mental and physical well-being of the workers.
 	
 	\section{Extension}
 	
-	In the data collection, the authors collected employment details such as job roles, tenures and job seniority. These variables were part of the controls involved in the well-being estimates. For the extension to the original analysis, we explored the effect of schedule predictability towards well-being outcomes based on job position, that is, whether the respondent was a manager, by using interaction terms. Predicted values of well-being outcomes were computed to facilitate interpretation of the interaction effects.
+	In the data collection, the authors collected employment details such as job roles, tenures and job seniority. Therefore in extension to the original analysis, we explored the effect of schedule predictability towards well-being outcomes based on job position, that is, whether the respondent was a manager, by using interaction terms. Predicted values of well-being outcomes were computed to facilitate interpretation of the interaction effects.
 	
 	\subsection{Analysis}
 	
