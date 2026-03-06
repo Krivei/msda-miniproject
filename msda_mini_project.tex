@@ -32,7 +32,7 @@
 	\vspace{20pt}
 	\hrule
 	
-	This report investigates the impact of work schedule uncertainty on the health and economic security of hourly service workers by replicating a study on Seattle's Secure Scheduling Ordinance. The replication employs a Difference-in-Differences (DiD) model and a Two-Stage Least Squares (2SLS) approach to test the influence of the ordinance on scheduling stability and well-being. Our results successfully replicated the trajectory of schedule unpredictability found in the original study. However, minor deviance in specific well-being metrics, such as sleep quality, were observed due to the use of a single imputed dataset rather than pooled estimates. While the replication confirms that the ordinance improved schedule predictability, the evidence for "quality of life" improvements remains mixed, as impacts on happiness and psychological distress were not statistically significant in the causal analysis.
+	This report investigates the impact of work schedule uncertainty on the health and economic security of hourly service workers by replicating a study on Seattle's Secure Scheduling Ordinance. The replication employs a Difference-in-Differences (DiD) model and a Two-Stage Least Squares (2SLS) approach to test the influence of the ordinance on scheduling stability and well-being. Our results successfully replicated the trajectory of schedule unpredictability found in the original study. However, minor deviance in specific well-being metrics, such as sleep quality, were observed due to the use of a single imputed dataset rather than pooled estimates. While the replication confirms that the ordinance improved schedule predictability, the evidence for "quality of life" improvements remains mixed, as impacts on happiness and psychological distress were not statistically significant in the causal analysis. In the extension analysis, we explored the association of unpredictability levels and well-being by examining effects on managerial role. We employed a simplified approximation of observing interaction effects, and findings showed that happiness, distress and hardship were expected to improve with lower unpredictability levels, with managers having better increments than non-managers.
 	
 	\vspace{5pt}
 	\hrule
@@ -262,8 +262,6 @@
 	
 	A baseline model was used to examine independent effects of unpredictability and managerial role. This was then processed over the interaction model to investigate the association of schedule predictability and well-being by roles. Since our approach used a logit model, we used a robustness check to compare logit and probit model to observe differences.
 	
-	The estimates presented in this section should be interpreted as associations rather than causal effects, as reported by the authors.
-	
 	\subsubsection{Data and Empirical Strategy}
 	
 	The original study addressed missing data using multiple imputation and pool estimates. However, the present analysis relies on a single imputed dataset due to absence of a unique id to apply Rubin's Rule and use of a different software for analysis. While this approach preserved the structure of the data, the variance estimates did not include between-imputation variability \textemdash~ the extra variance due to missing data, and thus it was acknowledged that underestimated standard errors could be possible.
@@ -290,25 +288,7 @@
 	
 	Figure~\ref{fig:baseline_models} shows the prediction of well-being with different levels of schedule unpredictability. Workers were predicted to have a reduction in happiness and sleep quality with an increasing level of unpredictability. The estimates suggest that eliminating schedule unpredictability will increase happiness by about 18 to 19 percentage points (from 63\% to 81\%). Furthermore, this can also increase reports of sleep quality by 27 percentage points (from 20\% to 47\%), decrease reports of distress by 39 perecentage points (from 55\% to 16\%) and material hardship by 28 percentage points (from 76\% to 48\%). These results suggest that reducing schedule unpredictability is associated with better well-being on average across workers. With this, we observed results by managerial roles through interaction.
 	
-	\begin{table}[h]
-		\caption{Logit coefficients from the interaction models. Models involve interaction between schedule unpredictability and managerial status. Managerial status was represented with binary values: 0 (not a manager) or 1 (manager). The interaction is labelled as Unpred:manager. ***p < 0.001, **p < 0.01, *p < 0.05}
-		\label{tab:p_interaction}
-		\begin{tabularx}{\textwidth}{ l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X }
-			
-			\toprule
-			& Happiness & Psychological distress & Good sleep & Hardship \\
-			\midrule
-			Unpred. coef. & -0.141*** & 0.291*** & -0.206*** & 0.193*** \\
-			Unpred. std. error & (0.011) & (0.011) & (0.011) & (0.010) \\
-			Manager coef. & 0.242** & -0.310*** & -0.021 & -0.171* \\
-			Manager std. error & (0.086) & (0.088) & (0.073) & (0.023) \\
-			Unpred:manager coef. & -0.083*** & 0.063* & -0.043 & 0.070** \\
-			Unpred:manager std.error & (0.001) & (0.025) & (0.024) & (0.023) \\
-			\bottomrule
-		\end{tabularx}
-	\end{table}
-	
-	\begin{figure}[h]
+		\begin{figure}[t]
 		\centering
 		\begin{subfigure}{0.49\textwidth}
 			\centering
@@ -335,15 +315,25 @@
 		\label{fig:baseline_models}
 	\end{figure}
 	
-	Table~\ref{tab:p_interaction} shows the results of relationship of schedule unpredictability with well-being, contrasted by managerial roles. Results were produced from a second model involving an interaction between schedule unpredictability and managerial status. 	The Table~\ref{tab:p_interaction} estimates suggest that managers experience worse well-being qualities with increasing unpredictability levels. Sleep quality among managers reduce more than non-managers as the unpredictability level increases, but this relationship fell short of statistical significance (p = 0.106). Therefore, schedule unpredictability does not decrease sleep quality for managers than non-managers.
+	\begin{table}[htbp]
+		\caption{Logit coefficients from the interaction models. Models involve interaction between schedule unpredictability and managerial status. Managerial status was represented with binary values: 0 (not a manager) or 1 (manager). The interaction is labelled as Unpred:manager. ***p < 0.001, **p < 0.01, *p < 0.05}
+		\label{tab:p_interaction}
+		\begin{tabularx}{\textwidth}{ l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X }
+			
+			\toprule
+			& Happiness & Psychological distress & Good sleep & Hardship \\
+			\midrule
+			Unpred. coef. & -0.141*** & 0.291*** & -0.206*** & 0.193*** \\
+			Unpred. std. error & (0.011) & (0.011) & (0.011) & (0.010) \\
+			Manager coef. & 0.242** & -0.310*** & -0.021 & -0.171* \\
+			Manager std. error & (0.086) & (0.088) & (0.073) & (0.023) \\
+			Unpred:manager coef. & -0.083*** & 0.063* & -0.043 & 0.070** \\
+			Unpred:manager std.error & (0.001) & (0.025) & (0.024) & (0.023) \\
+			\bottomrule
+		\end{tabularx}
+	\end{table}
 	
-	Across three well-being probabilities, workers with non-managerial roles are expected to report better results with higher unpredictability levels as compared to the manager counterparts. Figure 2 shows predicted probabilities of the three well-beings: happiness, distress and hardship. 
-	
-	Eliminating unpredictability increases happiness by 17 percentage points (from 64\% to 81\%) for non-managers, and 26 percentage points (from 58\% to 84\%) for managers. Reduction in distress can be reported by 37 percentage points (from 54\% to 17\%) and 43\% (from 56\% to 13\%) for the respective roles. Similar trend can be observed for hardship, with a reduction of 26 percentage points (from 75\% to 49\%) and 35 percentage points (from 79\% to 44\%).
-	
-	For the three well-beings, the figures suggest that managers have worse outcome than non-managers with the higher schedule unpredictability, but have better qualities with decreasing unpredictability levels. 
-	
-	\begin{figure}[t]
+	\begin{figure}[htbp]
 		\centering
 		\begin{subfigure}{0.49\textwidth}
 			\centering
@@ -365,17 +355,25 @@
 		\label{fig:interaction_models}
 	\end{figure}
 	
+	Table~\ref{tab:p_interaction} shows the results of relationship of schedule unpredictability with well-being, contrasted by managerial roles. Results were produced from a second model involving an interaction between schedule unpredictability and managerial status. 	The Table~\ref{tab:p_interaction} estimates suggest that managers experience worse well-being qualities with increasing unpredictability levels. Sleep quality among managers reduce more than non-managers as the unpredictability level increases, but this relationship fell short of statistical significance (p = 0.106). Therefore, schedule unpredictability does not decrease sleep quality for managers than non-managers.
+	
+	Across three well-being probabilities, workers with non-managerial roles are expected to report better results with higher unpredictability levels as compared to the manager counterparts. Figure~\ref{fig:interaction_models} shows predicted probabilities of the three well-beings: happiness, distress and hardship. 
+	
+	Eliminating unpredictability increases happiness by 17 percentage points (from 64\% to 81\%) for non-managers, and 26 percentage points (from 58\% to 84\%) for managers. Reduction in distress can be reported by 37 percentage points (from 54\% to 17\%) and 43\% (from 56\% to 13\%) for the respective roles. Similar trend can be observed for hardship, with a reduction of 26 percentage points (from 75\% to 49\%) and 35 percentage points (from 79\% to 44\%).
+	
+	For the three well-beings, the figures suggest that managers have worse outcome than non-managers with the higher schedule unpredictability, but have better qualities with decreasing unpredictability levels. 
+	
 	\subsection{Discussion}
 	
 	This extension examined whether schedule unpredictability is associated with well-being outcomes using a simplified approach. The findings indicate that reducing unpredictability is associated with improvements in several well-being outcomes. Reducing unpredictability increases happiness, and reduces psychological distress and material hardship. These associations are statistically significant.
 	
-	By investigating the effect of managerial roles, we find that managers were affected worse than the non-managers, but a reduction in unpredictability led to an improvement in quality for both roles, and this increase was much better for managers. Specifically, for happiness, managers had lower well-being levels under the highest unpredictability, but showed steeper improvements with decreasing unpredictability compared to non-managers. For distress and hardship, a similar pattern can be observed, suggesting that at low levels of unpredictability, managers report better outcomes. However, with the absence of the original framework used in the original study, these results should be interpreted as evidence for associations rather than casual effects.
+	By investigating the effect of managerial roles, we find that managers were affected worse than the non-managers, but a reduction in unpredictability led to an improvement in quality for both roles, and this increase was much better for managers. Specifically, for happiness, managers had lower well-being levels under the highest unpredictability, but showed steeper improvements with decreasing unpredictability compared to non-managers. For distress and hardship, a similar pattern can be observed, suggesting that at low levels of unpredictability, managers report better outcomes. However, with the absence of the original framework used in the original study, these results should be interpreted as evidence for associations rather than causal effects.
 	
 	Overall, these findings are in line with the original study, in that the ordinance can have a positive effect for workers, and more specifically, this effect was applicable for both roles, even though different intensity could be observed.
 
 	% bibliography
-%	\bibliographystyle{ACM-Reference-Format}
-%	\bibliography{references}
+	\bibliographystyle{ACM-Reference-Format}
+	\bibliography{references}
 	
 	
 \end{document}
