@@ -10,7 +10,11 @@
 \usepackage{subcaption}
 \setlength{\parindent}{15pt}
 
+\usepackage{caption}
+\renewcommand{\figurename}{Fig.}
+\captionsetup[figure]{labelsep=period}
 
+\captionsetup[table]{labelsep=period}
 
 \newcounter{quote}
 \newcommand{\qcode}{S\refstepcounter{quote}\thequote}
@@ -271,7 +275,7 @@
 	Table~\ref{tab:p_baseline} presents results from the baseline logistic regression model estimating the association between schedule unpredictability and the probability of reporting a high well-being. The estimates imply that increasing the number of types of schedule unpredictability lead to statistically significant results in every well-being, where workers experience a reduction in happiness, an increase in psychological distress, a lower quality of good sleep and increased experience of at least one material hardship.  
 	
 	\begin{table}[h]
-		\caption{Logit coefficients from the baseline models. Models include control for only managerial status. This specification does not involve the two-way method or instrumental variable approach used in the original study. ***p < 0.001, **p < 0.01, *p < 0.05}
+		\caption{Logit coefficients from the baseline models: Models include control for only managerial status. This specification does not involve the two-way method or instrumental variable approach used in the original study. ***p < 0.001, **p < 0.01, *p < 0.05}
 		\label{tab:p_baseline}
 	\begin{tabularx}{\textwidth}{ l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X }
 
@@ -311,12 +315,12 @@
 			\includegraphics[width=\textwidth]{figures/baseline_hardship.png}
 			\subcaption{Baseline model of hardship.}
 		\end{subfigure}
-		\caption{Baseline models of well-being outcomes. Each model consists of two roles, manager and non-manager, but they act as controls.}
+		\caption{Baseline models of well-being outcomes: Each model consists of two roles, manager and non-manager, but they act as controls.}
 		\label{fig:baseline_models}
 	\end{figure}
 	
 	\begin{table}[htbp]
-		\caption{Logit coefficients from the interaction models. Models involve interaction between schedule unpredictability and managerial status. Managerial status was represented with binary values: 0 (not a manager) or 1 (manager). The interaction is labelled as Unpred:manager. ***p < 0.001, **p < 0.01, *p < 0.05}
+		\caption{Logit coefficients from the interaction models: Models involve interaction between schedule unpredictability and managerial status. Managerial status was represented with binary values: 0 (not a manager) or 1 (manager). The interaction is labelled as Unpred:manager. ***p < 0.001, **p < 0.01, *p < 0.05}
 		\label{tab:p_interaction}
 		\begin{tabularx}{\textwidth}{ l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X }
 			
@@ -351,7 +355,7 @@
 			\includegraphics[width=0.49\textwidth]{figures/interaction_hardship.png}
 			\subcaption{Interaction model of hardship.}
 		\end{subfigure}
-		\caption{Interaction models of well-being outcomes. This show the relationship between unpredictability and managerial role on the effect of well being, as a predicted probability.}
+		\caption{Interaction models of well-being outcomes: This show the relationship between unpredictability and managerial role on the effect of well being, as a predicted probability.}
 		\label{fig:interaction_models}
 	\end{figure}
 	
