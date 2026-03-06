@@ -168,7 +168,7 @@
 	
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=0.5\columnwidth]{figures/sched_unpred.jpeg}
+		\includegraphics[width=0.6\columnwidth]{figures/sched_unpred.jpeg}
 		\caption{Distribution of Schedule Unpredictability}
 		\label{sched_dist}
 	\end{figure}
@@ -187,9 +187,9 @@
 	
 	In the equation, \textit{Y} is an outcome of interest for individual \textit{i} at time \textit{t} (where time can be baseline, year 1, or year 2); \textit{X} is a vector of individual-level control variables, such as age, gender, race, educational attainment, school enrollment, marital status, presence of children in household, job tenure, managerial status, and  industry subsector ; \textit{Seattle} variable is a binary value where 1 is for the "Seattle treatment group" and 0 is for the "Comparison group"; \textit{YearOne} is valued as 1 for the first year after the law is active and is 0 otherwise; \textit{YearTwo} is valued as 1 for the second year after the law is active and is 0 otherwise; $\text{Seattle}_{it} YearOne$ and $\text{Seattle}_{it} YearTwo$ are interaction terms that will be valued as 1 for members that belong to the treatment group in the first and second year, respectively, and 0 otherwise. $\pi$ and $\rho$ are coefficients that represent the effect of the law on outcome \textit{Y} after 1 and 2 y following implementation.
 	
-	\begin{figure}[h]
+	\begin{figure}[htbp]
 		\centering
-		\includegraphics[width=0.4\columnwidth]{figures/did_replication.jpeg}		
+		\includegraphics[width=0.4\columnwidth]{figures/did_replication.jpeg}
 		\includegraphics[width=0.4\columnwidth]{figures/did_original.jpeg}
 		\caption{Graph Comparison}
 		\label{fig:comparison}
@@ -218,15 +218,15 @@
 	
 	The researchers used the ivprobit command in Stata in order to estimate the first and second stages while the replication used a manual method in R, hence allowing the possibility of the method being a second source of deviation. 
 	
-	\begin{figure}[h]
+	\begin{figure}[htbp]
 		\centering	
-		\includegraphics[width=0.4\columnwidth]{figures/sls_original.jpeg}
+		\includegraphics[width=0.5\columnwidth]{figures/sls_original.jpeg}
 		\caption{Paper's predicted values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
 		\label{fig:sls_original}
 	\end{figure}
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=0.4\columnwidth]{figures/sls_replication.jpeg}		
+		\includegraphics[width=0.5\columnwidth]{figures/sls_replication.jpeg}		
 		\caption{Replicated prediction values for well-being outcomes for workers with average unpredictability or simulated elimination of unpredictability}
 		\label{fig:slscomparison}
 	\end{figure}
